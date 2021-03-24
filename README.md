@@ -1,6 +1,7 @@
 # K-Coloring-CNF encoder
 input:\
 K N\
-n1 n2\
-n1 n3\
+1 2\
+1 3\
+2 3
 etc...
