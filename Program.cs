@@ -20,16 +20,17 @@ namespace CNF_K_Coloring {
 
             int k = int.Parse(info[0]);
             int n = int.Parse(info[1]);
-            var edges = new Dictionary<int, HashSet<int>>();
-            for (int i = 1; i <= n; i++)
-                edges.Add(i, new HashSet<int>());
+            var edges = new List<List<int>>();
+
+            for (int i = 0; i < n; i++)
+                edges.Add(new List<int>());
             for (int i = 1; i < lines.Length; i++) {
                 var vertices = lines[i].Trim().Split(' ');
-                int a = int.Parse(vertices[0]);
-                int b = int.Parse(vertices[1]);
+                int a = int.Parse(vertices[0]) - 1;
+                int b = int.Parse(vertices[1]) - 1;
 
-                edges[a].Add(b);
-                edges[b].Add(a);
+                if (!edges[b].Contains(a))
+                    edges[a].Add(b);
             }
 
             // logic
@@ -42,57 +43,33 @@ namespace CNF_K_Coloring {
                 clauseCount++;
                 int variable = i * k + 1;
                 result += "\n" + variable;
+
                 for (int color = 1; color < k; color++) {
                     result += " " + (variable + color);
                 }
+
                 result += " 0";
             }
 
             // only one color
             for (int i = 0; i < n; i++) {
-                var check = new Dictionary<int, HashSet<int>>();
-                for (int ii = 0; ii < k; ii++)
-                    check.Add(ii, new HashSet<int>());
-                int variable = i * k + 1;
-                for (int a = 0; a < k; a++) {
-                    for (int b = 0; b < k; b++) {
-                        if (a == b)
-                            continue;
-                        if (check[a].Contains(b))
-                            continue;
-
-                        int color1 = variable + a;
-                        int color2 = variable + b;
-
-                        result += $"\n{-color1} {-color2} 0";
+                for (int c1 = 1; c1 <= k; c1++) {
+                    for (int c2 = c1 + 1; c2 <= k; c2++) {
                         clauseCount++;
-
-                        check[a].Add(b);
-                        check[b].Add(a);
+                        result += $"\n{-(i * k + c1)} {-(i * k + c2)} 0";
                     }
                 }
             }
 
             // edge checks
-            var check2 = new Dictionary<int, HashSet<int>>();
-            for (int i = 0; i < n; i++)
-                check2.Add(i, new HashSet<int>());
-            for (int a = 0; a < n; a++) {
-                for (int b = 0; b < n; b++) {
-                    if (!edges[a].Contains(b))
-                        continue;
-                    if (check2[a].Contains(b))
-                        continue;
-
-                    for (int color = 0; color < k; color++) {
-                        int var1 = a * k + 1 + color;
-                        int var2 = b * k + 1 + color;
-                        result += $"\n{-var1} {-var2} 0";
+            for (int i = 0; i < n; i++) {
+                foreach (var ii in edges[i]) {
+                    for (int c = 1; c <= k; c++) {
+                        int a = i * k + c;
+                        int b = ii * k + c;
+                        result += $"\n{-a} {-b} 0";
                         clauseCount++;
                     }
-
-                    check2[a].Add(b);
-                    check2[b].Add(a);
                 }
             }
 
