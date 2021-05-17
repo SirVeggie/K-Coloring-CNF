@@ -2,7 +2,7 @@
   "profiles": {
     "3-Coloring-CNF": {
       "commandName": "Project",
-      "commandLineArgs": "\"S:\\- Library -\\Projects\\University\\Automated logical reasoning\\K-Coloring-CNF\\input.txt\" \"S:\\- Library -\\Projects\\University\\Automated logical reasoning\\K-Coloring-CNF\\output.txt\""
+      "commandLineArgs": "\"S:\\- Library -\\Projects\\University\\Automated logical reasoning\\K-Coloring-CNF\\input.txt\" \"S:\\- Library -\\Projects\\University\\Automated logical reasoning\\K-Coloring-CNF\\output.cnf\""
     }
   }
 }
